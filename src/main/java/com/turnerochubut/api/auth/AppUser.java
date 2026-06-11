@@ -1,0 +1,99 @@
+package com.turnerochubut.api.auth;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+@Entity
+@Table(name = "app_users")
+class AppUser {
+
+    @Id
+    private UUID id;
+
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(name = "display_name", nullable = false)
+    private String displayName;
+
+    @Column(name = "password_hash")
+    private String passwordHash;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "auth_provider", nullable = false)
+    private AuthProvider authProvider;
+
+    @Column(nullable = false)
+    private boolean active;
+
+    @Column(name = "created_at", nullable = false)
+    private OffsetDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private OffsetDateTime updatedAt;
+
+    protected AppUser() {
+    }
+
+    AppUser(String email, String displayName, String passwordHash, UserRole role, AuthProvider authProvider) {
+        this.id = UUID.randomUUID();
+        this.email = email;
+        this.displayName = displayName;
+        this.passwordHash = passwordHash;
+        this.role = role;
+        this.authProvider = authProvider;
+        this.active = true;
+    }
+
+    @PrePersist
+    void prePersist() {
+        OffsetDateTime now = OffsetDateTime.now();
+        createdAt = now;
+        updatedAt = now;
+    }
+
+    @PreUpdate
+    void preUpdate() {
+        updatedAt = OffsetDateTime.now();
+    }
+
+    UUID getId() {
+        return id;
+    }
+
+    String getEmail() {
+        return email;
+    }
+
+    String getDisplayName() {
+        return displayName;
+    }
+
+    String getPasswordHash() {
+        return passwordHash;
+    }
+
+    UserRole getRole() {
+        return role;
+    }
+
+    AuthProvider getAuthProvider() {
+        return authProvider;
+    }
+
+    boolean isActive() {
+        return active;
+    }
+}
