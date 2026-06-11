@@ -1,0 +1,43 @@
+services:
+  turnero-api:
+    build: .
+    container_name: turnero-api
+    restart: unless-stopped
+    depends_on:
+      turnero-db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://turnero-db:5432/turnero_chubut
+      SPRING_DATASOURCE_USERNAME: turnero
+      SPRING_DATASOURCE_PASSWORD: ${TURNERO_DB_PASSWORD:-turnero}
+      TURNERO_CORS_ALLOWED_ORIGINS: ${TURNERO_CORS_ALLOWED_ORIGINS:-http://localhost:4200,https://app.turnerochubut.com}
+      SERVER_PORT: 8080
+    networks:
+      - turnero-internal
+      - web
+
+  turnero-db:
+    image: postgres:16-alpine
+    container_name: turnero-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: turnero_chubut
+      POSTGRES_USER: turnero
+      POSTGRES_PASSWORD: ${TURNERO_DB_PASSWORD:-turnero}
+    volumes:
+      - turnero-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U turnero -d turnero_chubut"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - turnero-internal
+
+volumes:
+  turnero-db-data:
+
+networks:
+  turnero-internal:
+  web:
+    external: true
