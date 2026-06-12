@@ -122,6 +122,31 @@ class AppUser {
         return address;
     }
 
+    void updateProfile(
+        String email,
+        String firstName,
+        String lastName,
+        String phoneNumber,
+        String address,
+        UserRole role
+    ) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.displayName = firstName + " " + lastName;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.role = role;
+    }
+
+    void updatePasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    void setActive(boolean active) {
+        this.active = active;
+    }
+
     String getPasswordHash() {
         return passwordHash;
     }

@@ -11,7 +11,8 @@ record UserResponse(
     String phoneNumber,
     String address,
     UserRole role,
-    AuthProvider authProvider
+    AuthProvider authProvider,
+    boolean active
 ) {
     static UserResponse from(AppUser user) {
         return new UserResponse(
@@ -23,7 +24,8 @@ record UserResponse(
             user.getPhoneNumber(),
             user.getAddress(),
             user.getRole(),
-            user.getAuthProvider()
+            user.getAuthProvider(),
+            user.isActive()
         );
     }
 }
