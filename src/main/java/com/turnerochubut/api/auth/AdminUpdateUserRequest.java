@@ -27,7 +27,7 @@ record AdminUpdateUserRequest(
     @Size(max = 180)
     String address,
 
-    @Size(min = 6, max = 100)
+    @Size(max = 100)
     @Pattern(
         regexp = "^$|^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).+$",
         message = "La contrasena debe tener al menos una mayuscula y un caracter especial"
