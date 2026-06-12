@@ -69,6 +69,9 @@ class AdminUserService {
         if (isSelf && !request.active()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No podes desactivar tu propio usuario");
         }
+        if (isSelf && request.role() != UserRole.ADMINISTRADOR) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No podes quitarte el rol administrador");
+        }
 
         user.updateProfile(
             email,
