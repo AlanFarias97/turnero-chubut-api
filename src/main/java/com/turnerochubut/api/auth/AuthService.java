@@ -28,14 +28,17 @@ class AuthService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "El email ya esta registrado");
         }
 
-        UserRole role = request.role() == null ? UserRole.CAJERO : request.role();
-        if (role == UserRole.ADMINISTRADOR) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No se puede crear un administrador desde registro publico");
+        UserRole role = request.role();
+        if (role != UserRole.CAJERO && role != UserRole.OPERARIO) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Solo se pueden registrar cajeros u operarios");
         }
 
         AppUser user = new AppUser(
             email,
-            request.displayName().trim(),
+            request.firstName().trim(),
+            request.lastName().trim(),
+            request.phoneNumber().trim(),
+            request.address().trim(),
             passwordEncoder.encode(request.password()),
             role,
             AuthProvider.EMAIL

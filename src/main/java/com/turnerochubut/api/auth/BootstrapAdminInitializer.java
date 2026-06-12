@@ -43,7 +43,10 @@ class BootstrapAdminInitializer implements ApplicationRunner {
 
         AppUser admin = new AppUser(
             email,
-            resolveDisplayName(),
+            resolveFirstName(),
+            resolveLastName(),
+            "-",
+            "-",
             passwordEncoder.encode(properties.password()),
             UserRole.ADMINISTRADOR,
             AuthProvider.EMAIL
@@ -53,10 +56,19 @@ class BootstrapAdminInitializer implements ApplicationRunner {
         LOGGER.info("Bootstrap administrator created for email {}", email);
     }
 
-    private String resolveDisplayName() {
+    private String resolveFirstName() {
         if (StringUtils.hasText(properties.displayName())) {
-            return properties.displayName().trim();
+            return properties.displayName().trim().split("\\s+", 2)[0];
         }
         return "Administrador";
+    }
+
+    private String resolveLastName() {
+        if (!StringUtils.hasText(properties.displayName())) {
+            return "-";
+        }
+
+        String[] parts = properties.displayName().trim().split("\\s+", 2);
+        return parts.length > 1 ? parts[1] : "-";
     }
 }

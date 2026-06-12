@@ -24,6 +24,18 @@ class AppUser {
     @Column(name = "display_name", nullable = false)
     private String displayName;
 
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
+
+    @Column(name = "phone_number", nullable = false)
+    private String phoneNumber;
+
+    @Column(nullable = false)
+    private String address;
+
     @Column(name = "password_hash")
     private String passwordHash;
 
@@ -47,10 +59,23 @@ class AppUser {
     protected AppUser() {
     }
 
-    AppUser(String email, String displayName, String passwordHash, UserRole role, AuthProvider authProvider) {
+    AppUser(
+        String email,
+        String firstName,
+        String lastName,
+        String phoneNumber,
+        String address,
+        String passwordHash,
+        UserRole role,
+        AuthProvider authProvider
+    ) {
         this.id = UUID.randomUUID();
         this.email = email;
-        this.displayName = displayName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.displayName = firstName + " " + lastName;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
         this.passwordHash = passwordHash;
         this.role = role;
         this.authProvider = authProvider;
@@ -79,6 +104,22 @@ class AppUser {
 
     String getDisplayName() {
         return displayName;
+    }
+
+    String getFirstName() {
+        return firstName;
+    }
+
+    String getLastName() {
+        return lastName;
+    }
+
+    String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    String getAddress() {
+        return address;
     }
 
     String getPasswordHash() {

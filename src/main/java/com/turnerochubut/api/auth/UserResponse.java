@@ -6,6 +6,10 @@ record UserResponse(
     UUID id,
     String email,
     String displayName,
+    String firstName,
+    String lastName,
+    String phoneNumber,
+    String address,
     UserRole role,
     AuthProvider authProvider
 ) {
@@ -14,6 +18,10 @@ record UserResponse(
             user.getId(),
             user.getEmail(),
             user.getDisplayName(),
+            user.getFirstName(),
+            user.getLastName(),
+            user.getPhoneNumber(),
+            user.getAddress(),
             user.getRole(),
             user.getAuthProvider()
         );

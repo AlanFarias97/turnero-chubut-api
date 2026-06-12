@@ -32,8 +32,11 @@ class AuthControllerTests {
     void registerLoginAndReadCurrentUser() throws Exception {
         String registerBody = objectMapper.writeValueAsString(Map.of(
             "email", "caja@turnerochubut.com",
-            "displayName", "Caja Chubut",
-            "password", "password123",
+            "firstName", "Caja",
+            "lastName", "Chubut",
+            "phoneNumber", "2804000000",
+            "address", "Av. Taller 123",
+            "password", "Caja-1",
             "role", "CAJERO"
         ));
 
@@ -43,11 +46,16 @@ class AuthControllerTests {
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.token", notNullValue()))
             .andExpect(jsonPath("$.user.email").value("caja@turnerochubut.com"))
+            .andExpect(jsonPath("$.user.displayName").value("Caja Chubut"))
+            .andExpect(jsonPath("$.user.firstName").value("Caja"))
+            .andExpect(jsonPath("$.user.lastName").value("Chubut"))
+            .andExpect(jsonPath("$.user.phoneNumber").value("2804000000"))
+            .andExpect(jsonPath("$.user.address").value("Av. Taller 123"))
             .andExpect(jsonPath("$.user.role").value("CAJERO"));
 
         String loginBody = objectMapper.writeValueAsString(Map.of(
             "email", "caja@turnerochubut.com",
-            "password", "password123"
+            "password", "Caja-1"
         ));
 
         String loginResponse = mockMvc.perform(post("/api/auth/login")
@@ -73,8 +81,11 @@ class AuthControllerTests {
     void publicRegisterCannotCreateAdministrators() throws Exception {
         String requestBody = objectMapper.writeValueAsString(Map.of(
             "email", "admin@turnerochubut.com",
-            "displayName", "Admin",
-            "password", "password123",
+            "firstName", "Admin",
+            "lastName", "Chubut",
+            "phoneNumber", "2804000000",
+            "address", "Av. Taller 123",
+            "password", "Admin-1",
             "role", "ADMINISTRADOR"
         ));
 
